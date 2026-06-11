@@ -20,36 +20,27 @@ export default function Hero({ onRequestEstimate }: HeroProps) {
 
     // Force mobile-friendly autoplay attributes programmatically
     video.muted = true;
+    video.defaultMuted = true;
     video.setAttribute("playsinline", "true");
     
-    const playVideo = () => {
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((error) => {
-          console.warn("Autoplay blocked, waiting for user interaction:", error);
-          
-          // Play on first user touch or click if blocked by Low Power Mode or browser restrictions
-          const handleFirstInteraction = () => {
-            video.play().catch(e => console.error("Play on interaction failed:", e));
-            window.removeEventListener("touchstart", handleFirstInteraction);
-            window.removeEventListener("click", handleFirstInteraction);
-          };
-          window.addEventListener("touchstart", handleFirstInteraction, { passive: true });
-          window.addEventListener("click", handleFirstInteraction, { passive: true });
-        });
-      }
-    };
-
-    // If browser is already loaded/loading, try playing
-    if (video.readyState >= 2) {
-      playVideo();
-    } else {
-      video.addEventListener("loadeddata", playVideo);
+    // Attempt playback immediately on mount
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch((error) => {
+        console.warn("Autoplay blocked, waiting for user interaction:", error);
+        
+        // Play on first user touch, click, or scroll if blocked by browser restrictions
+        const handleFirstInteraction = () => {
+          video.play().catch(e => console.error("Play on interaction failed:", e));
+          window.removeEventListener("touchstart", handleFirstInteraction);
+          window.removeEventListener("click", handleFirstInteraction);
+          window.removeEventListener("scroll", handleFirstInteraction);
+        };
+        window.addEventListener("touchstart", handleFirstInteraction, { passive: true });
+        window.addEventListener("click", handleFirstInteraction, { passive: true });
+        window.addEventListener("scroll", handleFirstInteraction, { passive: true });
+      });
     }
-
-    return () => {
-      video.removeEventListener("loadeddata", playVideo);
-    };
   }, []);
 
   const handleScrollDown = () => {
