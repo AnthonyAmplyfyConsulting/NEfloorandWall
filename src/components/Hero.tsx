@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowDown } from "lucide-react";
@@ -10,8 +11,46 @@ interface HeroProps {
 }
 
 export default function Hero({ onRequestEstimate }: HeroProps) {
-  // Looping construction/interior design stock video placeholder
   const videoUrl = "/hero_video.mp4";
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Force mobile-friendly autoplay attributes programmatically
+    video.muted = true;
+    video.setAttribute("playsinline", "true");
+    
+    const playVideo = () => {
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.warn("Autoplay blocked, waiting for user interaction:", error);
+          
+          // Play on first user touch or click if blocked by Low Power Mode or browser restrictions
+          const handleFirstInteraction = () => {
+            video.play().catch(e => console.error("Play on interaction failed:", e));
+            window.removeEventListener("touchstart", handleFirstInteraction);
+            window.removeEventListener("click", handleFirstInteraction);
+          };
+          window.addEventListener("touchstart", handleFirstInteraction, { passive: true });
+          window.addEventListener("click", handleFirstInteraction, { passive: true });
+        });
+      }
+    };
+
+    // If browser is already loaded/loading, try playing
+    if (video.readyState >= 2) {
+      playVideo();
+    } else {
+      video.addEventListener("loadeddata", playVideo);
+    }
+
+    return () => {
+      video.removeEventListener("loadeddata", playVideo);
+    };
+  }, []);
 
   const handleScrollDown = () => {
     const nextSection = document.getElementById("ticker");
@@ -24,10 +63,12 @@ export default function Hero({ onRequestEstimate }: HeroProps) {
     <section id="hero" className={styles.hero}>
       {/* Background Video */}
       <video
+        ref={videoRef}
         autoPlay
         loop
         muted
         playsInline
+        preload="auto"
         className={styles.videoBg}
       >
         <source src={videoUrl} type="video/mp4" />

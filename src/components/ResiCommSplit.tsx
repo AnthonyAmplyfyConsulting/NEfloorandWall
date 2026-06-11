@@ -1,12 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Home, Building2 } from "lucide-react";
 import styles from "./ResiCommSplit.module.css";
 
 export default function ResiCommSplit({ onRequestEstimate }: { onRequestEstimate: () => void }) {
   const [hoveredSide, setHoveredSide] = useState<"residential" | "commercial" | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 868);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   return (
     <section id="resi-comm" className={styles.splitSection}>
@@ -24,12 +34,26 @@ export default function ResiCommSplit({ onRequestEstimate }: { onRequestEstimate
           className={`${styles.pane} ${styles.residentialPane} ${
             hoveredSide === "residential" ? styles.expanded : hoveredSide === "commercial" ? styles.collapsed : ""
           }`}
-          onMouseEnter={() => setHoveredSide("residential")}
-          onMouseLeave={() => setHoveredSide(null)}
-          animate={{
-            flex: hoveredSide === "residential" ? 1.6 : hoveredSide === "commercial" ? 0.7 : 1,
-          }}
-          transition={{ type: "spring", stiffness: 150, damping: 20 }}
+          onMouseEnter={isMobile ? undefined : () => setHoveredSide("residential")}
+          onMouseLeave={isMobile ? undefined : () => setHoveredSide(null)}
+          animate={
+            isMobile
+              ? {}
+              : {
+                  flexGrow: hoveredSide === "residential" ? 1.6 : hoveredSide === "commercial" ? 0.7 : 1,
+                }
+          }
+          transition={
+            isMobile
+              ? { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+              : { type: "spring", stiffness: 150, damping: 20 }
+          }
+          style={isMobile ? { transformStyle: "preserve-3d" } : undefined}
+          {...(isMobile ? {
+            initial: { opacity: 0, y: 60, rotateX: 10, scale: 0.96 },
+            whileInView: { opacity: 1, y: 0, rotateX: 0, scale: 1 },
+            viewport: { once: true, margin: "-100px" }
+          } : {})}
         >
           <div className={styles.paneBg} />
           
@@ -66,12 +90,26 @@ export default function ResiCommSplit({ onRequestEstimate }: { onRequestEstimate
           className={`${styles.pane} ${styles.commercialPane} ${
             hoveredSide === "commercial" ? styles.expanded : hoveredSide === "residential" ? styles.collapsed : ""
           }`}
-          onMouseEnter={() => setHoveredSide("commercial")}
-          onMouseLeave={() => setHoveredSide(null)}
-          animate={{
-            flex: hoveredSide === "commercial" ? 1.6 : hoveredSide === "residential" ? 0.7 : 1,
-          }}
-          transition={{ type: "spring", stiffness: 150, damping: 20 }}
+          onMouseEnter={isMobile ? undefined : () => setHoveredSide("commercial")}
+          onMouseLeave={isMobile ? undefined : () => setHoveredSide(null)}
+          animate={
+            isMobile
+              ? {}
+              : {
+                  flexGrow: hoveredSide === "commercial" ? 1.6 : hoveredSide === "residential" ? 0.7 : 1,
+                }
+          }
+          transition={
+            isMobile
+              ? { duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }
+              : { type: "spring", stiffness: 150, damping: 20 }
+          }
+          style={isMobile ? { transformStyle: "preserve-3d" } : undefined}
+          {...(isMobile ? {
+            initial: { opacity: 0, y: 60, rotateX: 10, scale: 0.96 },
+            whileInView: { opacity: 1, y: 0, rotateX: 0, scale: 1 },
+            viewport: { once: true, margin: "-100px" }
+          } : {})}
         >
           <div className={styles.paneBg} />
 

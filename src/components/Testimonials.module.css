@@ -185,10 +185,7 @@
     top: auto !important;
     width: 100%;
     max-width: 450px;
-    opacity: 1 !important;
-    scale: 1 !important;
-    box-shadow: var(--shadow-sm) !important;
-    transform: none !important;
+    box-shadow: var(--shadow-sm);
   }
   
   .spotlightCard {

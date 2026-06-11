@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import { motion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion";
 import { Home, ShieldCheck, Layers, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import styles from "./Services.module.css";
@@ -48,14 +48,22 @@ const services: ServiceItem[] = [
 
 function ServiceCard({ service, index, onAction }: { service: ServiceItem; index: number; onAction: () => void }) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Motion values for mouse movement (for 3D tilt effect)
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 868);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Desktop mouse movement (3D tilt on hover)
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-
-  // Smooth springs to avoid jumpy rotations
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [15, -15]), { damping: 20, stiffness: 200 });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-15, 15]), { damping: 20, stiffness: 200 });
+  const desktopRotateX = useSpring(useTransform(y, [-0.5, 0.5], [15, -15]), { damping: 20, stiffness: 200 });
+  const desktopRotateY = useSpring(useTransform(x, [-0.5, 0.5], [-15, 15]), { damping: 20, stiffness: 200 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -73,24 +81,47 @@ function ServiceCard({ service, index, onAction }: { service: ServiceItem; index
     y.set(0);
   };
 
+  // Mobile scroll-driven 3D tilt and translation
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "end start"],
+  });
+  const smoothProgress = useSpring(scrollYProgress, { damping: 15, stiffness: 100 });
+  const scrollRotateX = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [12, 0, 0, -12]);
+  const scrollScale = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [0.93, 1, 1, 0.93]);
+  const scrollOpacity = useTransform(smoothProgress, [0, 0.2, 0.8, 1], [0.5, 1, 1, 0.5]);
+  const scrollY = useTransform(smoothProgress, [0, 0.35, 0.65, 1], [40, 0, 0, -40]);
+
+  // Combine based on viewport
+  const rotateX = isMobile ? scrollRotateX : desktopRotateX;
+  const rotateY = isMobile ? 0 : desktopRotateY;
+  const scale = isMobile ? scrollScale : 1;
+  const opacity = isMobile ? scrollOpacity : 1;
+  const translateY = isMobile ? scrollY : 0;
+
   return (
     <motion.div
       ref={cardRef}
       className={styles.cardContainer}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6, delay: index * 0.15 }}
+      onMouseMove={isMobile ? undefined : handleMouseMove}
+      onMouseLeave={isMobile ? undefined : handleMouseLeave}
       style={{
         rotateX,
         rotateY,
+        scale,
+        opacity,
+        y: translateY,
         transformStyle: "preserve-3d",
       }}
+      {...(!isMobile ? {
+        initial: { opacity: 0, y: 50 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-100px" },
+        transition: { duration: 0.6, delay: index * 0.15 }
+      } : {})}
     >
       <div className={styles.cardInner} style={{ transform: "translateZ(30px)" }}>
-        {/* Image Visual Spot */}
+        {/* Image Visual Spot - Clean Photo Only */}
         <div className={styles.visualSpot}>
           <Image
             src={service.imageUrl}
@@ -100,13 +131,6 @@ function ServiceCard({ service, index, onAction }: { service: ServiceItem; index
             priority={index === 0}
             className={styles.cardImage}
           />
-          <div className={styles.imageOverlay} />
-          
-          <div className={styles.iconWrapper} style={{ transform: "translateZ(40px)" }}>
-            {service.icon}
-          </div>
-          {/* Wireframe Grid Accent */}
-          <div className={styles.gridAccent} />
         </div>
 
         {/* Content */}

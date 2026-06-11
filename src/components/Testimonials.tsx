@@ -72,15 +72,26 @@ const reviewsData: Review[] = [
 
 export default function Testimonials({ onLeaveReview }: { onLeaveReview: () => void }) {
   const [spotlightIndex, setSpotlightIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Cycle the review spotlight every 4.5 seconds
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 868);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) return;
+    // Cycle the review spotlight every 4.5 seconds on desktop only
     const interval = setInterval(() => {
       setSpotlightIndex((prev) => (prev + 1) % reviewsData.length);
     }, 4500);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isMobile]);
 
   return (
     <section id="testimonials" className={styles.testimonialsSection}>
@@ -109,48 +120,57 @@ export default function Testimonials({ onLeaveReview }: { onLeaveReview: () => v
             return (
               <motion.div
                 key={review.id}
-                className={`${styles.reviewCard} ${isSpotlight ? styles.spotlightCard : styles.dimmedCard}`}
-                style={{
-                  left: review.initialX,
-                  top: review.initialY,
-                }}
-                animate={
-                  isSpotlight
-                    ? {
-                        scale: 1.12,
-                        zIndex: 100,
-                        boxShadow: "0 25px 50px rgba(0, 47, 108, 0.12), 0 0 0 3px var(--color-accent-orange)",
-                        x: 0,
-                        y: 0,
-                      }
+                className={`${styles.reviewCard} ${isMobile || isSpotlight ? styles.spotlightCard : styles.dimmedCard}`}
+                style={
+                  isMobile
+                    ? { transformStyle: "preserve-3d" }
                     : {
-                        scale: 0.95,
-                        zIndex: 10,
-                        boxShadow: "var(--shadow-md)",
-                        // Slow, continuous organic drift animation
-                        x: [0, 8, -8, 0],
-                        y: [0, -10, 10, 0],
+                        left: review.initialX,
+                        top: review.initialY,
                       }
                 }
-                transition={
-                  isSpotlight
-                    ? { type: "spring", stiffness: 180, damping: 20 }
-                    : {
-                        x: {
-                          repeat: Infinity,
-                          duration: review.orbitDuration,
-                          ease: "easeInOut",
-                        },
-                        y: {
-                          repeat: Infinity,
-                          duration: review.orbitDuration + 2,
-                          ease: "easeInOut",
-                        },
-                        scale: { duration: 0.4 },
-                        zIndex: { duration: 0.4 },
-                      }
-                }
-                onClick={() => setSpotlightIndex(index)}
+                {...(isMobile
+                  ? {
+                      initial: { opacity: 0, y: 50, rotateX: 10, scale: 0.96 },
+                      whileInView: { opacity: 1, y: 0, rotateX: 0, scale: 1 },
+                      viewport: { once: true, margin: "-80px" },
+                      transition: { duration: 0.6, ease: "easeOut", delay: index * 0.05 },
+                    }
+                  : {
+                      animate: isSpotlight
+                        ? {
+                            scale: 1.12,
+                            zIndex: 100,
+                            boxShadow: "0 25px 50px rgba(0, 47, 108, 0.12), 0 0 0 3px var(--color-accent-orange)",
+                            x: 0,
+                            y: 0,
+                          }
+                        : {
+                            scale: 0.95,
+                            zIndex: 10,
+                            boxShadow: "var(--shadow-md)",
+                            // Slow, continuous organic drift animation
+                            x: [0, 8, -8, 0],
+                            y: [0, -10, 10, 0],
+                          },
+                      transition: isSpotlight
+                        ? { type: "spring", stiffness: 180, damping: 20 }
+                        : {
+                            x: {
+                              repeat: Infinity,
+                              duration: review.orbitDuration,
+                              ease: "easeInOut",
+                            },
+                            y: {
+                              repeat: Infinity,
+                              duration: review.orbitDuration + 2,
+                              ease: "easeInOut",
+                            },
+                            scale: { duration: 0.4 },
+                            zIndex: { duration: 0.4 },
+                          },
+                    })}
+                onClick={isMobile ? undefined : () => setSpotlightIndex(index)}
               >
                 {/* Google Badge Overlay */}
                 <div className={styles.cardHeader}>
