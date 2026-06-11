@@ -1,0 +1,135 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 47, 108, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.modalWindow {
+  background: white;
+  width: 100%;
+  max-width: 640px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-lg), 0 30px 60px rgba(0, 47, 108, 0.15);
+  position: relative;
+  overflow: hidden;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  color: var(--text-muted);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-grey);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: var(--transition-smooth);
+  border: 1px solid var(--border-light);
+  z-index: 10;
+}
+
+.closeBtn:hover {
+  background: var(--bg-grey-dark);
+  color: var(--color-primary-navy);
+}
+
+.modalContent {
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--color-primary-navy);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+}
+
+.lastUpdated {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 2rem;
+  display: block;
+}
+
+/* Scrollable container for text content */
+.bodyScroll {
+  overflow-y: auto;
+  padding-right: 1rem;
+  flex-grow: 1;
+  margin-bottom: 2rem;
+}
+
+.textContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.textContent h4 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-primary-navy);
+  letter-spacing: -0.01em;
+}
+
+.textContent p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.footerActions {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-light);
+  padding-top: 1.5rem;
+}
+
+.doneBtn {
+  background: var(--color-primary-navy);
+  color: white;
+  padding: 0.85rem 2.25rem;
+  border-radius: var(--border-radius);
+  font-weight: 800;
+  font-size: 1rem;
+  text-transform: uppercase;
+  transition: var(--transition-smooth);
+}
+
+.doneBtn:hover {
+  background: var(--color-primary-navy-dark);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    padding: 2.25rem 1.5rem 1.5rem 1.5rem;
+  }
+  
+  .title {
+    font-size: 1.6rem;
+  }
+}

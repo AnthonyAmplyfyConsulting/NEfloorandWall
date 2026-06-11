@@ -1,0 +1,234 @@
+.servicesSection {
+  background: var(--bg-grey);
+  padding: 8rem 0;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.headerWrapper {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 5rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.preTitle {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: var(--color-accent-orange);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.mainTitle {
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--color-primary-navy);
+  letter-spacing: -0.03em;
+}
+
+.subtext {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-top: 0.5rem;
+}
+
+/* Grid Perspective for 3D tilt effects */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  perspective: 1200px;
+}
+
+.cardContainer {
+  cursor: pointer;
+  height: 100%;
+}
+
+.cardInner {
+  background: var(--bg-light);
+  border: 1px solid var(--border-light);
+  border-radius: calc(var(--border-radius) + 4px);
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-md);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.cardInner:hover {
+  border-color: rgba(229, 106, 0, 0.4);
+  box-shadow: var(--shadow-lg), 0 10px 30px rgba(0, 47, 108, 0.04);
+}
+
+/* Wireframe Visual Placeholder Spot */
+.visualSpot {
+  height: 200px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.cardImage {
+  object-fit: cover;
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.cardInner:hover .cardImage {
+  transform: scale(1.08);
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(245, 247, 250, 0.55) 100%
+  );
+  z-index: 2;
+}
+
+.gridAccent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.15;
+  background-image: 
+    linear-gradient(rgba(0, 47, 108, 0.4) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 47, 108, 0.4) 1px, transparent 1px);
+  background-size: 20px 20px;
+  z-index: 3;
+}
+
+.iconWrapper {
+  background: var(--bg-light);
+  color: var(--color-primary-navy);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(0, 47, 108, 0.05);
+  transition: var(--transition-smooth);
+  z-index: 4;
+}
+
+.cardInner:hover .iconWrapper {
+  color: white;
+  background: var(--color-accent-orange);
+  transform: translateZ(50px) scale(1.1) !important;
+  box-shadow: 0 8px 20px rgba(229, 106, 0, 0.3);
+}
+
+.cardContent {
+  padding: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.cardTagline {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--color-accent-orange);
+  letter-spacing: 0.1em;
+}
+
+.cardTitle {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--color-primary-navy);
+  margin: 0.5rem 0 1rem 0;
+  letter-spacing: -0.01em;
+}
+
+.cardDescription {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.featureList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  flex-grow: 1;
+}
+
+.featureItem {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.checkIcon {
+  color: var(--color-accent-orange);
+  font-weight: 800;
+}
+
+.cardBtn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-grey);
+  border: 1px solid var(--border-light);
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--color-primary-navy);
+  transition: var(--transition-smooth);
+}
+
+.cardInner:hover .cardBtn {
+  background: var(--color-primary-navy);
+  color: white;
+  border-color: var(--color-primary-navy);
+}
+
+.btnArrow {
+  transition: transform 0.3s ease;
+}
+
+.cardInner:hover .btnArrow {
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainTitle {
+    font-size: 2.2rem;
+  }
+}

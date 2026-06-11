@@ -1,0 +1,93 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.gate {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: var(--bg-grey);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
+}
+
+.leftGate {
+  left: 0;
+  border-right: 1px solid var(--border-light);
+}
+
+.rightGate {
+  right: 0;
+  border-left: 1px solid var(--border-light);
+}
+
+.logoContainer {
+  position: relative;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  pointer-events: none;
+}
+
+.logoWrapper {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logoImage {
+  object-fit: contain;
+  z-index: 2;
+  filter: drop-shadow(0 10px 25px rgba(0, 47, 108, 0.15));
+}
+
+.glow {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(229, 106, 0, 0.2) 0%, rgba(0, 47, 108, 0.05) 50%, transparent 70%);
+  z-index: 1;
+}
+
+.subtext {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tagline {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-primary-navy);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.lineLoader {
+  width: 180px;
+  height: 3px;
+  background: rgba(0, 47, 108, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary-navy), var(--color-accent-orange));
+}

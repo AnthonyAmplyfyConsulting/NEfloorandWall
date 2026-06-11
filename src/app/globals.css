@@ -1,0 +1,114 @@
+:root {
+  --color-primary-navy: #002F6C;
+  --color-primary-navy-dark: #001C42;
+  --color-accent-orange: #E56A00;
+  --color-accent-orange-light: #FF9E43;
+  --color-accent-orange-hover: #C55B00;
+  --bg-light: #FFFFFF;
+  --bg-grey: #F5F7FA;
+  --bg-grey-dark: #EAEFF5;
+  --text-dark: #0F172A;
+  --text-muted: #475569;
+  --border-light: #E2E8F0;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.08);
+  --font-family: 'Outfit', sans-serif;
+  --border-radius: 12px;
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-light);
+  color: var(--text-dark);
+  min-height: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-grey);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-navy);
+  border-radius: 5px;
+  border: 2px solid var(--bg-grey);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-orange);
+}
+
+/* Base Styles */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--color-primary-navy);
+}
+
+p {
+  line-height: 1.6;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+button {
+  font-family: var(--font-family);
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: var(--transition-smooth);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Custom Selection */
+::selection {
+  background-color: var(--color-accent-orange);
+  color: white;
+}
+
+/* Utilities */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-primary-navy) 30%, var(--color-accent-orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Hide scrollbar utility when modal is open */
+.no-scroll {
+  overflow: hidden;
+}

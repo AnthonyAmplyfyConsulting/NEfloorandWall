@@ -1,0 +1,151 @@
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: var(--bg-grey);
+}
+
+.videoBg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+/* Light white frosted overlay to keep site feeling light but highly readable */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(245, 247, 250, 0.68) 60%,
+    var(--bg-light) 100%
+  );
+  z-index: 2;
+}
+
+.contentContainer {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2.5rem;
+}
+
+.topBranding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brandingTitle {
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: var(--color-primary-navy);
+  margin-top: 0.5rem;
+}
+
+.headlineWrapper {
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.title {
+  font-size: 4.5rem;
+  font-weight: 900;
+  line-height: 1.05;
+  color: var(--color-primary-navy);
+  letter-spacing: -0.04em;
+}
+
+.orangeText {
+  color: var(--color-accent-orange);
+  position: relative;
+}
+
+.subtitle {
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  max-width: 750px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.ctaWrapper {
+  margin-top: 1rem;
+}
+
+.heroCta {
+  background: var(--color-accent-orange);
+  color: white;
+  padding: 1.25rem 3.5rem;
+  border-radius: var(--border-radius);
+  font-size: 1.3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 10px 25px rgba(229, 106, 0, 0.25);
+  transition: var(--transition-smooth);
+}
+
+.heroCta:hover {
+  background: var(--color-accent-orange-hover);
+  transform: scale(1.05) translateY(-3px);
+  box-shadow: 0 15px 30px rgba(229, 106, 0, 0.35);
+}
+
+.scrollIndicator {
+  position: absolute;
+  bottom: -60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.arrow {
+  color: var(--color-accent-orange);
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.8rem;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .heroCta {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+  }
+}
